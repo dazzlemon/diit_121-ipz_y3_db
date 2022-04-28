@@ -144,17 +144,17 @@ INSERT INTO Schedule ([Day], [Time], IsOddWeek, ClassTypeId, ClassId, GroupId, S
                     , (1,    '9:30',  NULL,     2,           1,       940,     2,        1,         1234)
                     ;
 
-INSERT INTO Student (FirstName,  LastName,     IsInFirstSubgroup, GroupId)
-             VALUES ('Daniel',    'Safonov',   0,                 911) -- 1
-                  , ('John',      'Wick',      1,                 911) -- 2
-                  , ('Valeria',   'Poverly',   1,                 931) -- 3
-                  , ('Raelynn',   'Bandini',   0,                 940) -- 4
-                  , ('Kai',       'McKenna',   1,                 927) -- 5
-                  , ('Ryker',     'Kade',      0,                 964) -- 6
-                  , ('Jesse',     'Carter',    1,                 951) -- 7
-                  , ('Barrett',   'Rivera',    1,                 915) -- 8
-                  , ('Charlotte', 'Solace',    0,                 920) -- 9
-                  , ('Bennett',   'Hernandez', 1,                 936) -- 10
-                  , ('Nyla',      'Hansley',   0,                 928) -- 11
-                  , ('Ruth',      'Kora',      0,                 949) -- 12
+INSERT INTO Student (FirstName,  LastName,     GroupId)
+             VALUES ('Daniel',    'Safonov',   911) -- 1
+                  , ('John',      'Wick',      911) -- 2
+                  , ('Valeria',   'Poverly',   931) -- 3
+                  , ('Raelynn',   'Bandini',   940) -- 4
+                  , ('Kai',       'McKenna',   927) -- 5
+                  , ('Ryker',     'Kade',      964) -- 6
+                  , ('Jesse',     'Carter',    951) -- 7
+                  , ('Barrett',   'Rivera',    915) -- 8
+                  , ('Charlotte', 'Solace',    920) -- 9
+                  , ('Bennett',   'Hernandez', 936) -- 10
+                  , ('Nyla',      'Hansley',   928) -- 11
+                  , ('Ruth',      'Kora',      949) -- 12
                   ;
