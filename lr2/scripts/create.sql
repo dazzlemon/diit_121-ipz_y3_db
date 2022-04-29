@@ -3,7 +3,26 @@
 -- USE master;
 -- DROP DATABASE School;
 
-CREATE DATABASE School;
+CREATE DATABASE School
+     ON PRIMARY ( NAME = SchoolPrimary1
+                , FILENAME = '/home/mssql/school-db/primary1.mdf'
+                , SIzE = 10
+                , MAXSIZE = 20
+                , FILEGROWTH = 10KB
+                ),
+     FILEGROUP SchoolFilegroup1 ( NAME = SchoolFilegroup1_1
+                                , FILENAME = '/home/mssql/school-db/school-filegroup1_1.ndf'
+                                , SIZE = 5
+                                , MAXSIZE = 20
+                                , FILEGROWTH = 1
+                                )
+     LOG ON ( NAME = SchoolLog
+            , FILENAME = '/home/mssql/school-db/log.ldf'
+            , SIZE = 1
+            , MAXSIZE = 5
+            , FILEGROWTH = 5KB
+            );
+
 USE School;
 
 CREATE TABLE Room( Id INT
