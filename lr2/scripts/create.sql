@@ -16,11 +16,12 @@ CREATE TABLE Teacher( Id        INT IDENTITY(1, 1)
                     , FirstName TEXT NOT NULL
                     , LastName  TEXT NOT NULL
                     
-                    , CONSTRAINT PK_Teacher PRIMARY KEY (Id));
-
+                    , CONSTRAINT PK_Teacher PRIMARY KEY (Id)
+                    )
 
 CREATE TABLE [Group]( Id        INT
-                    , [Name]    TEXT NOT NULL UNIQUE
+                    -- NVARCHAR(450) instead of TEXT because it won't work with UNIQUE otherwise
+                    , [Name]    NVARCHAR(450) NOT NULL UNIQUE
                     , CuratorId INT NOT NULL
 
                     , CONSTRAINT FK_CuratorId FOREIGN KEY (CuratorId) REFERENCES Teacher (Id)
@@ -29,13 +30,15 @@ CREATE TABLE [Group]( Id        INT
 
 
 CREATE TABLE ClassType( Id   INT IDENTITY(1, 1)
-                      , Name TEXT NOT NULL UNIQUE
+                      -- NVARCHAR(450) instead of TEXT because it won't work with UNIQUE otherwise
+                      , Name NVARCHAR(450) NOT NULL UNIQUE
 
                       , CONSTRAINT PK_ClassType PRIMARY KEY (Id)
                       )
 
 CREATE TABLE Class( Id            INT IDENTITY(1, 1)
-                  , [Name]        TEXT NOT NULL UNIQUE                  
+                  -- NVARCHAR(450) instead of TEXT because it won't work with UNIQUE otherwise
+                  , [Name]        NVARCHAR(450) NOT NULL UNIQUE                  
 
                   , CONSTRAINT PK_Class PRIMARY KEY (Id)
                   )
@@ -46,7 +49,7 @@ CREATE TABLE Schedule( [Day]       SMALLINT NOT NULL
                      , ClassTypeId INT      NOT NULL
                      , ClassId     INT      NOT NULL
                      , GroupId     INT      NOT NULL
-                     , Subgroup    INT      NOT NULL
+                     , Subgroup    INT      NOT NULL DEFAULT 0 -- 0 means whole group together
                      , TeacherId   INT      NOT NULL
                      , RoomId      INT      NOT NULL
 
@@ -66,7 +69,7 @@ CREATE TABLE Student( Id                INT  IDENTITY(1, 1)
                     
                     , CONSTRAINT PK_Student         PRIMARY KEY (Id)
                     , CONSTRAINT FK_Student_GroupId FOREIGN KEY (GroupId) REFERENCES [Group] (Id)
-                    );
+                    )
 
 -- Populate
 -- source for random names: https://perchance.org/first-and-last-name
