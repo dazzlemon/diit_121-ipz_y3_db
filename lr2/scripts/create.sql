@@ -7,6 +7,7 @@ CREATE DATABASE School;
 USE School;
 
 CREATE TABLE Room( Id INT
+
                   , CONSTRAINT PK_Room PRIMARY KEY (Id)
                   )
 
@@ -19,7 +20,7 @@ CREATE TABLE Teacher( Id        INT IDENTITY(1, 1)
 
 
 CREATE TABLE [Group]( Id        INT
-                    , [Name]    TEXT NOT NULL
+                    , [Name]    TEXT NOT NULL UNIQUE
                     , CuratorId INT NOT NULL
 
                     , CONSTRAINT FK_CuratorId FOREIGN KEY (CuratorId) REFERENCES Teacher (Id)
@@ -28,20 +29,20 @@ CREATE TABLE [Group]( Id        INT
 
 
 CREATE TABLE ClassType( Id   INT IDENTITY(1, 1)
-                      , Name TEXT NOT NULL
+                      , Name TEXT NOT NULL UNIQUE
 
                       , CONSTRAINT PK_ClassType PRIMARY KEY (Id)
                       )
 
 CREATE TABLE Class( Id            INT IDENTITY(1, 1)
-                  , [Name]        TEXT NOT NULL
-                  
+                  , [Name]        TEXT NOT NULL UNIQUE                  
+
                   , CONSTRAINT PK_Class PRIMARY KEY (Id)
                   )
 
 CREATE TABLE Schedule( [Day]       SMALLINT NOT NULL
                      , [Time]      TIME     NOT NULL
-                     , IsOddWeek   BIT -- if NULL same for both weeks
+                     , IsOddWeek   BIT DEFAULT NULL -- if NULL same for both weeks
                      , ClassTypeId INT      NOT NULL
                      , ClassId     INT      NOT NULL
                      , GroupId     INT      NOT NULL
