@@ -50,4 +50,10 @@ INSERT INTO Student (FirstNameRenamed,  LastName,     GroupId)
 
 UPDATE Student
     SET FirstNameRenamed = 'Avatar'
-    Where CONVERT(VARCHAR(MAX), FirstNameRenamed) = 'Ruth'
+    WHERE CONVERT(VARCHAR(MAX), FirstNameRenamed) = 'Ruth'
+
+DELETE Room
+    WHERE Id BETWEEN 300 AND 600
+
+DELETE Class
+    WHERE Id = 8
