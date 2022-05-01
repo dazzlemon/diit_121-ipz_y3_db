@@ -1,6 +1,5 @@
 -- Create
 
--- USE master;
 -- DROP DATABASE School;
 
 CREATE DATABASE School
@@ -25,10 +24,13 @@ CREATE DATABASE School
 
 USE School;
 
+CREATE SCHEMA School
+
 CREATE TABLE Room( Id INT
 
                   , CONSTRAINT PK_Room PRIMARY KEY (Id)
                   )
+     ON SchoolFilegroup1;
 
 
 CREATE TABLE Teacher( Id        INT IDENTITY(1, 1)
@@ -37,15 +39,17 @@ CREATE TABLE Teacher( Id        INT IDENTITY(1, 1)
                     
                     , CONSTRAINT PK_Teacher PRIMARY KEY (Id)
                     )
+-- every other table should be created on primary too, because it is default filegroup
+     ON [PRIMARY];
 
-CREATE TABLE [Group]( Id        INT
-                    -- NVARCHAR(450) instead of TEXT because it won't work with UNIQUE otherwise
-                    , [Name]    NVARCHAR(450) NOT NULL UNIQUE
-                    , CuratorId INT NOT NULL
-
-                    , CONSTRAINT FK_CuratorId FOREIGN KEY (CuratorId) REFERENCES Teacher (Id)
-                    , CONSTRAINT PK_Group     PRIMARY KEY (Id)
-                    )
+CREATE TABLE School.[Group]( Id        INT
+                           -- NVARCHAR(450) instead of TEXT because it won't work with UNIQUE otherwise
+                           , [Name]    NVARCHAR(450) NOT NULL UNIQUE
+                           , CuratorId INT NOT NULL
+     
+                           , CONSTRAINT FK_CuratorId FOREIGN KEY (CuratorId) REFERENCES Teacher (Id)
+                           , CONSTRAINT PK_Group     PRIMARY KEY (Id)
+                           )
 
 
 CREATE TABLE ClassType( Id   INT IDENTITY(1, 1)
@@ -76,7 +80,7 @@ CREATE TABLE Schedule( [Day]       SMALLINT NOT NULL
                      , CONSTRAINT FK_Schedule_TeacherId   FOREIGN KEY (TeacherId)   REFERENCES Teacher   (Id)
                      , CONSTRAINT FK_Schedule_ClassTypeId FOREIGN KEY (ClassTypeId) REFERENCES ClassType (Id)
                      , CONSTRAINT FK_Schedule_ClassId     FOREIGN KEY (ClassId)     REFERENCES Class     (Id)
-                     , CONSTRAINT FK_Schedule_GroupId     FOREIGN KEY (GroupId)     REFERENCES [Group]   (Id)
+                     , CONSTRAINT FK_Schedule_GroupId     FOREIGN KEY (GroupId)     REFERENCES School.[Group]   (Id)
                      , CONSTRAINT CHK_Schedule CHECK ([Day] BETWEEN 0 AND 6) -- 0 is monday
                      )
 
@@ -87,7 +91,7 @@ CREATE TABLE Student( Id                INT  IDENTITY(1, 1)
                     , GroupId           INT  NOT NULL
                     
                     , CONSTRAINT PK_Student         PRIMARY KEY (Id)
-                    , CONSTRAINT FK_Student_GroupId FOREIGN KEY (GroupId) REFERENCES [Group] (Id)
+                    , CONSTRAINT FK_Student_GroupId FOREIGN KEY (GroupId) REFERENCES School.[Group] (Id)
                     )
 
 -- Populate
@@ -124,20 +128,20 @@ INSERT INTO Teacher (FirstName, LastName  )
                   , ('Amir', 'Scott') --       14
                   ;
 
-INSERT INTO [Group] (Id, [Name], CuratorId)
-             VALUES (911, '911', 1)
-                  , (912, '912', 2)
-                  , (931, '931', 3)
-                  , (940, '940', 4)
-                  , (927, '927', 5)
-                  , (964, '964', 6)
-                  , (951, '951', 7)
-                  , (915, '915', 8)
-                  , (920, '920', 9)
-                  , (936, '936', 10)
-                  , (928, '928', 11)
-                  , (949, '949', 12)
-                  ;
+INSERT INTO School.[Group] (Id, [Name], CuratorId)
+                    VALUES (911, '911', 1)
+                         , (912, '912', 2)
+                         , (931, '931', 3)
+                         , (940, '940', 4)
+                         , (927, '927', 5)
+                         , (964, '964', 6)
+                         , (951, '951', 7)
+                         , (915, '915', 8)
+                         , (920, '920', 9)
+                         , (936, '936', 10)
+                         , (928, '928', 11)
+                         , (949, '949', 12)
+                         ;
 
 -- Less than 10 because there is no other types I know
 INSERT INTO ClassType ([Name])
