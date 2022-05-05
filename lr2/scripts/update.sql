@@ -26,12 +26,12 @@ ALTER TABLE Student
 ALTER TABLE Student DROP DF_Student_FirstNameRenamed
 
 UPDATE Teacher
-    SET FirstName = 'baobab'
-    WHERE CONVERT(VARCHAR(MAX), FirstName) = 'aboba'
+    SET FirstName = '121'
+    WHERE FirstName LIKE 'baobab'
 
 UPDATE Teacher
     SET FirstName = 'Avatar'
-    Where CONVERT(VARCHAR(MAX), FirstName) = 'Zara'
+    Where FirstName LIKE 'Zara'
 
 INSERT INTO Student (FirstNameRenamed,  LastName,     GroupId)
              VALUES ('Daniel', 'Safonov',   911) -- 1
@@ -50,7 +50,7 @@ INSERT INTO Student (FirstNameRenamed,  LastName,     GroupId)
 
 UPDATE Student
     SET FirstNameRenamed = 'Avatar'
-    WHERE CONVERT(VARCHAR(MAX), FirstNameRenamed) = 'Ruth'
+    WHERE FirstNameRenamed LIKE 'Ruth'
 
 DELETE Room
     WHERE Id BETWEEN 300 AND 600
