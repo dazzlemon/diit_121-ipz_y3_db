@@ -57,3 +57,17 @@ SELECT COALESCE(IsOddWeek, ClassTypeId) AS FirstNotNull
 FROM Schedule
 ORDER BY [Day]
 OFFSET 1 ROWS FETCH FIRST 2 ROWS ONLY
+
+-- DISTINCT
+-- Select all rooms in use 
+SELECT DISTINCT RoomId
+FROM Schedule
+ORDER BY RoomId DESC
+
+-- earliest class
+SELECT MIN([Time])
+FROM Schedule
+
+-- latest class
+SELECT MAX([Time])
+FROM Schedule
