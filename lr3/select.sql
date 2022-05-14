@@ -11,13 +11,14 @@ AND ClassTypeId IN ( SELECT Id
                      WHERE [Name] LIKE 'L%' -- 'Lecture' or 'Laboratory'
                    )
 
--- GROUP BY, COUNT, AS
--- TODO: SUM, AVG, MIN, MAX 
+-- GROUP BY, COUNT, AS, HAVING
+-- TODO: SUM, AVG, MIN, MAX
+
+-- Shows all groups that have exactly 2 students
 SELECT GroupId, COUNT(*) AS StudentCount
 FROM Student
 GROUP BY GroupId
-
--- TODO: HAVING
+HAVING COUNT(*) = 2
 
 -- TODO: DISTINCT
 
