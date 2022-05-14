@@ -3,11 +3,13 @@ USE School
 -- WHERE, IN, BETWEEN, LIKE
 -- ORDER BY, ASC
 -- CASE … WHEN … THEN … ELSE …
--- ROW_NUMBER, OVER, PARTITION BY
+-- ROW_NUMBER, OVER, PARTITION BY -- DENSE_RANK instead of ROW_NUMBER
 
 -- Shows all classes on any day between monday and friday that is lecture
 -- or laboratory
-SELECT ROW_NUMBER() OVER( PARTITION BY [Day]
+-- Days are mapped to text
+-- also row_number added
+SELECT DENSE_RANK() OVER( PARTITION BY [Day]
                           ORDER BY [Time] ASC
                         ) AS "row" 
      ,"Day" = CASE [Day] WHEN 0 THEN 'Monday'
@@ -41,10 +43,3 @@ SELECT GroupId, COUNT(*) AS StudentCount
 FROM Student
 GROUP BY GroupId
 HAVING COUNT(*) = 2
-
--- TODO: SUM, AVG, MIN, MAX
--- TODO: DISTINCT
--- TODO: DESC
--- TODO: TOP, PERCENT, WITH TIES
--- TODO: OFFSET, FETCH, FIRST, ROWS
--- TODO: COALESCE()
