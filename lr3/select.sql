@@ -1,11 +1,16 @@
 USE School
 
 -- WHERE, IN, BETWEEN, LIKE
--- ORDER BY, DESC
+-- ORDER BY, ASC
 -- CASE … WHEN … THEN … ELSE …
+-- ROW_NUMBER, OVER, PARTITION BY
+
 -- Shows all classes on any day between monday and friday that is lecture
 -- or laboratory
-SELECT "Day" = CASE [Day] WHEN 0 THEN 'Monday'
+SELECT ROW_NUMBER() OVER( PARTITION BY [Day]
+                          ORDER BY [Time] ASC
+                        ) AS "row" 
+     ,"Day" = CASE [Day] WHEN 0 THEN 'Monday'
                           WHEN 1 THEN 'Tuesday'
                           WHEN 2 THEN 'Wednesday'
                           WHEN 3 THEN 'Thursday'
@@ -28,7 +33,6 @@ AND ClassTypeId IN ( SELECT Id
                      FROM ClassType
                      WHERE [Name] LIKE 'L%' -- 'Lecture' or 'Laboratory'
                    )
-ORDER BY [Day] DESC
 
 -- GROUP BY, COUNT, AS
 -- HAVING
@@ -40,8 +44,7 @@ HAVING COUNT(*) = 2
 
 -- TODO: SUM, AVG, MIN, MAX
 -- TODO: DISTINCT
--- TODO: ASC
+-- TODO: DESC
 -- TODO: TOP, PERCENT, WITH TIES
 -- TODO: OFFSET, FETCH, FIRST, ROWS
--- TODO: ROW_NUMBER(), OVER, PARTITION BY
 -- TODO: COALESCE()
