@@ -1,10 +1,15 @@
 USE School
 
--- WHERE, BETWEEN
--- TODO: IN, LIKE
+-- WHERE, BETWEEN, IN, LIKE
+-- Shows all classes on any day between monday and friday that is not lecture
+-- or laboratory (so only practice)
 SELECT *
 FROM Schedule
-WHERE [Day] BETWEEN 0 AND 4
+WHERE [Day] BETWEEN 0 AND 4 -- between monday and friday (inclusive)
+AND ClassTypeId NOT IN ( SELECT Id
+                         FROM ClassType
+                         WHERE [Name] LIKE 'L%' -- 'Lecture' or 'Laboratory'
+                       )
 
 -- TODO: GROUP BY, COUNT, SUM, AVG, MIN, MAX, AS
 
