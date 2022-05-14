@@ -48,3 +48,8 @@ HAVING COUNT(*) = 2
 SELECT TOP 10 PERCENT WITH TIES *
 FROM Student
 ORDER By Id -- imagine that they are ordered by theirs marks or something
+
+-- No real world example with this database
+SELECT COALESCE(IsOddWeek, ClassTypeId) AS FirstNotNull
+     , *
+FROM Schedule
