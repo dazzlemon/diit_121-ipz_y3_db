@@ -49,7 +49,11 @@ SELECT TOP 10 PERCENT WITH TIES *
 FROM Student
 ORDER By Id -- imagine that they are ordered by theirs marks or something
 
+-- OFFSET, FETCH, FIRST, ROWS
+-- COALESCE
 -- No real world example with this database
 SELECT COALESCE(IsOddWeek, ClassTypeId) AS FirstNotNull
      , *
 FROM Schedule
+ORDER BY [Day]
+OFFSET 1 ROWS FETCH FIRST 2 ROWS ONLY
