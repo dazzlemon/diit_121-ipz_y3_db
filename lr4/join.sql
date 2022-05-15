@@ -58,3 +58,15 @@ SELECT Day, Time, IsOddWeek, ClassType.Name AS "Class type"
 FROM Schedule
 JOIN Class ON Class.Id = ClassId
 JOIN ClassType ON ClassType.Id = ClassTypeId
+
+SELECT Class.Id
+FROM Class
+LEFT JOIN Schedule ON ClassId = Class.Id
+
+SELECT Class.Id
+FROM Class
+RIGHT JOIN Schedule ON ClassId = Class.Id
+
+SELECT Class.Id
+FROM Class
+FULL JOIN Schedule ON ClassId = Class.Id
