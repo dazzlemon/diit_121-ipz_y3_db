@@ -31,8 +31,30 @@ UNION
      SELECT Id
      FROM Class
 
+-- Idk real world example
      SELECT ClassId
      FROM Schedule
 UNION ALL
      SELECT Id
      FROM Class
+
+-- inner join
+SELECT Day, Time, IsOddWeek, ClassTypeId, Name AS ClassName, GroupId, Subgroup
+     , TeacherId, RoomId
+-- FROM Schedule, Class -- Same
+FROM Schedule JOIN Class
+ON Class.Id = ClassId
+
+-- Idk real world example
+SELECT *
+FROM Schedule
+JOIN Room
+ON RoomId >= Room.Id
+
+-- multi join
+SELECT Day, Time, IsOddWeek, ClassType.Name AS "Class type"
+     , Class.Name AS ClassName, GroupId, Subgroup, TeacherId, RoomId
+-- FROM Schedule, Class -- Same
+FROM Schedule
+JOIN Class ON Class.Id = ClassId
+JOIN ClassType ON ClassType.Id = ClassTypeId
