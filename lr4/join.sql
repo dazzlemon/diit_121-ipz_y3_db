@@ -23,3 +23,16 @@ INTERSECT
 EXCEPT
      SELECT Id
      FROM Class
+
+-- Idk real world example
+     SELECT ClassId
+     FROM Schedule
+UNION
+     SELECT Id
+     FROM Class
+
+     SELECT ClassId
+     FROM Schedule
+UNION ALL
+     SELECT Id
+     FROM Class
