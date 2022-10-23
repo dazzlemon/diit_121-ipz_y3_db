@@ -114,6 +114,7 @@ WHERE GroupId = ALL( SELECT GroupId
 
 
 -- Nested derived tables
+-- Multiple references to the derived table (implicit)
 --   Select all groups (with week) that have just a single lecture that week
 SELECT GroupId, IsOddWeek
 FROM ( SELECT IsOddWeek
