@@ -1,10 +1,9 @@
 -- Multi valued self contained suqbuery
--- In
-
--- Shows all classes on any day between monday and friday that is lecture
--- or laboratory
--- Days are mapped to text
--- also row_number added
+-- IN
+--   Shows all classes on any day between monday and friday that is lecture
+--   or laboratory
+--   Days are mapped to text
+--   also row_number added
 SELECT DENSE_RANK() OVER( PARTITION BY [Day]
                           ORDER BY [Time] ASC
                         ) AS "row" 
@@ -31,3 +30,14 @@ AND ClassTypeId IN ( SELECT Id
                      FROM ClassType
                      WHERE [Name] LIKE 'L%' -- 'Lecture' or 'Laboratory'
                    )
+
+-- EXISTS
+--   Shows all students that have a class that starts at 9:30 on tuesday
+SELECT *
+FROM Student
+WHERE EXISTS ( SELECT *
+               FROM Schedule
+               WHERE GroupId = Student.GroupId
+                 AND [Day] = 1
+                 AND [Time] = '09:30:00'
+             )
