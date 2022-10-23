@@ -162,15 +162,16 @@ WHERE "Class Type" = 'Lecture'
 
 -- Multiple CTEs
 --   Map day, class type and class name to text
-WITH scheduleDayText AS ( SELECT DISTINCT "DayText" = CASE [Day] WHEN 0 THEN 'Monday'
-                                                                 WHEN 1 THEN 'Tuesday'
-                                                                 WHEN 2 THEN 'Wednesday'
-                                                                 WHEN 3 THEN 'Thursday'
-                                                                 WHEN 4 THEN 'Friday'
-                                                                 WHEN 5 THEN 'Saturday'
-                                                                 WHEN 6 THEN 'Sunday'
-                                                                 ELSE 'IMPOSSIBRU'
-                                                                 END
+WITH scheduleDayText AS ( SELECT DISTINCT "DayText" = CASE [Day] 
+                                             WHEN 0 THEN 'Monday'
+                                             WHEN 1 THEN 'Tuesday'
+                                             WHEN 2 THEN 'Wednesday'
+                                             WHEN 3 THEN 'Thursday'
+                                             WHEN 4 THEN 'Friday'
+                                             WHEN 5 THEN 'Saturday'
+                                             WHEN 6 THEN 'Sunday'
+                                             ELSE 'IMPOSSIBRU'
+                                             END
                                         , [Day]
                           FROM Schedule
                          ),
