@@ -31,6 +31,7 @@ AND ClassTypeId IN ( SELECT Id
                      WHERE [Name] LIKE 'L%' -- 'Lecture' or 'Laboratory'
                    )
 
+-- Single valued corellated subquery
 -- EXISTS
 --   Shows all students that have a class that starts at 9:30 on tuesday
 SELECT *
