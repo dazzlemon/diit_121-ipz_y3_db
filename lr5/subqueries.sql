@@ -159,3 +159,58 @@ FROM ( SELECT IsOddWeek
      ) AS DerivedTypeCount
 WHERE "Class Type" = 'Lecture'
   AND "Count" = 1
+
+-- Multiple CTEs
+--   Map day, class type and class name to text
+WITH scheduleDayText AS ( SELECT DISTINCT "DayText" = CASE [Day] WHEN 0 THEN 'Monday'
+                                                                 WHEN 1 THEN 'Tuesday'
+                                                                 WHEN 2 THEN 'Wednesday'
+                                                                 WHEN 3 THEN 'Thursday'
+                                                                 WHEN 4 THEN 'Friday'
+                                                                 WHEN 5 THEN 'Saturday'
+                                                                 WHEN 6 THEN 'Sunday'
+                                                                 ELSE 'IMPOSSIBRU'
+                                                                 END
+                                        , [Day]
+                          FROM Schedule
+                         ),
+     scheduleClassType AS ( SELECT DISTINCT ClassType.Name AS "Class type"
+                                          , ClassTypeId
+                            FROM Schedule, ClassType
+                            WHERE ClassType.Id = ClassTypeId
+                          ),
+     scheduleClassName AS ( SELECT DISTINCT Class.Name AS "Class name"
+                                          , ClassId
+                            FROM Schedule, Class
+                            WHERE Class.Id = ClassId
+                          )
+SELECT scheduleDayText.DayText
+     , Schedule.Time
+     , Schedule.IsOddWeek
+     , scheduleClassName.[Class name]
+     , scheduleClassType.[Class type]
+     , Schedule.GroupId
+     , Schedule.Subgroup
+     , Schedule.TeacherId
+     , Schedule.RoomId
+FROM Schedule
+   , scheduleDayText
+   , scheduleClassName
+   , scheduleClassType
+WHERE Schedule.Day = scheduleDayText.Day
+  AND Schedule.ClassTypeId = scheduleClassType.ClassTypeId
+  AND Schedule.ClassId = scheduleClassName.ClassId
+
+-- Recursive CTE
+WITH fibonacci ( n_
+               , n
+               )
+AS ( SELECT 0
+          , 1
+     UNION ALL SELECT n
+                    , n_ + n
+               FROM fibonacci
+               WHERE n < 1000000000
+   )
+SELECT n_ as fibonacci
+FROM fibonacci
