@@ -64,3 +64,20 @@ WHERE '09:30:00' IN ( SELECT [Time]
                       WHERE GroupId = Student.GroupId
                         AND [Day] = 1
                     )
+
+-- Multi valued corellated subquery
+-- ALL, EXISTS
+--   Shows all students that only have a class that starts at 9:30 on tuesday
+SELECT *
+FROM Student
+WHERE '09:30:00' = ALL( SELECT [Time]
+                        FROM Schedule
+                        WHERE GroupId = Student.GroupId
+                          AND [Day] = 1
+                      )
+  -- if none exist it will still return true
+  AND EXISTS ( SELECT [Time]
+               FROM Schedule
+               WHERE GroupId = Student.GroupId
+                 AND [Day] = 1
+             )
