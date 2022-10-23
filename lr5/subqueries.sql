@@ -92,20 +92,3 @@ WHERE GroupId = SOME( SELECT GroupId
                       WHERE [Day] = 1
                         AND [Time] = '09:30:00'
                     )
-
--- Multi valued self contained subquery
--- ALL, EXISTS
---   Shows all students that only have a class that starts at 9:30 on tuesday
-SELECT *
-FROM Student
-WHERE GroupId = ALL( SELECT GroupId
-                     FROM Schedule
-                     WHERE [Time] = '09:30:00'
-                       AND [Day] = 1
-                   )
-  -- if none exist it will still return true
-  AND EXISTS ( SELECT GroupId
-               FROM Schedule
-               WHERE [Time] = '09:30:00'
-                 AND [Day] = 1
-             )
