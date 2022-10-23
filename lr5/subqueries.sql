@@ -214,4 +214,26 @@ AS ( SELECT 0
                WHERE n < 1000000000
    )
 SELECT n_ as fibonacci
-FROM fibonacci
+FROM fibonacci;
+
+-- Multiple references to the same CTE
+--   Shows all students that only have a class that starts at 9:30 on tuesday
+WITH tuesdaySchedule ( [Time]
+                     , GroupId
+                     )
+AS ( SELECT [Time]
+          , GroupId
+     FROM Schedule
+     WHERE [Day] = 1
+   )
+SELECT *
+FROM Student
+WHERE '09:30:00' = ALL( SELECT [Time]
+                        FROM tuesdaySchedule
+                        WHERE GroupId = Student.GroupId
+                      )
+  -- if none exist it will still return true
+  AND EXISTS ( SELECT [Time]
+               FROM tuesdaySchedule
+               WHERE GroupId = Student.GroupId
+             )
