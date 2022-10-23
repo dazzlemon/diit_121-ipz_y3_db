@@ -237,3 +237,36 @@ WHERE '09:30:00' = ALL( SELECT [Time]
                FROM tuesdaySchedule
                WHERE GroupId = Student.GroupId
              )
+
+-- View
+--   Map Day, Class type and Class Name to text
+GO
+
+CREATE VIEW ScheduleTextView
+WITH ENCRYPTION
+   , SCHEMABINDING
+AS
+SELECT "Day" = CASE [Day] WHEN 0 THEN 'Monday'
+                          WHEN 1 THEN 'Tuesday'
+                          WHEN 2 THEN 'Wednesday'
+                          WHEN 3 THEN 'Thursday'
+                          WHEN 4 THEN 'Friday'
+                          WHEN 5 THEN 'Saturday'
+                          WHEN 6 THEN 'Sunday'
+                          ELSE 'IMPOSSIBRU'
+                          END
+     , [Time]
+     , IsOddWeek
+     , ClassType.Name AS [Class type]
+     , Class.Name AS [Class name]
+     , GroupId
+     , Subgroup
+     , TeacherId
+     , RoomId
+FROM dbo.Schedule
+JOIN dbo.ClassType ON ClassTypeId = ClassType.Id
+JOIN dbo.Class ON ClassId = Class.Id
+WITH CHECK OPTION
+GO
+
+SELECT * FROM ScheduleTextView
