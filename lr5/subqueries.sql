@@ -92,3 +92,22 @@ WHERE GroupId = SOME( SELECT GroupId
                       WHERE [Day] = 1
                         AND [Time] = '09:30:00'
                     )
+
+-- Multi valued self contained subquery
+--   ALL
+-- Single valued self contained subquery
+--   If there a group that is the only one
+--   to have a class that starts at 9:30 on tuesday
+--     select all students in that group
+SELECT *
+FROM Student
+WHERE GroupId = ALL( SELECT GroupId
+                     FROM Schedule
+                     WHERE [Day] = 1
+                       AND [Time] = '09:30:00'
+                   )
+  AND 1 = ( SELECT COUNT(*)
+            FROM Schedule
+            WHERE [Day] = 1
+              AND [Time] = '09:30:00'
+          )
