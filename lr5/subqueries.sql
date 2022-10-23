@@ -53,3 +53,14 @@ WHERE '09:30:00' = SOME( SELECT [Time]
                          WHERE GroupId = Student.GroupId
                            AND [Day] = 1
                        )
+
+-- Multi valued corellated subquery
+-- IN
+--   Shows all students that have a class that starts at 9:30 on tuesday
+SELECT *
+FROM Student
+WHERE '09:30:00' IN ( SELECT [Time]
+                      FROM Schedule
+                      WHERE GroupId = Student.GroupId
+                        AND [Day] = 1
+                    )
