@@ -1,3 +1,28 @@
+-- Inline TVF
+--  Select Schedule.Time by GroupId and Day
+CREATE FUNCTION ScheduleTimeByGroupIdDay ( @GroupId INT
+                                         , @Day INT
+                                         )
+RETURNS TABLE
+AS RETURN ( SELECT [Time]
+            FROM Schedule
+            WHERE GroupId = @GroupId
+              AND [Day] = @Day
+          )
+GO
+
+-- Inline TVF usage
+--   Shows all students that only have a class that starts at 9:30 on tuesday
+SELECT *
+FROM Student
+WHERE '09:30:00' = ALL( SELECT *
+                        FROM ScheduleTimeByGroupIdDay(Student.GroupId, 1)
+                      )
+  -- if none exist it will still return true
+  AND EXISTS ( SELECT *
+               FROM ScheduleTimeByGroupIdDay(Student.GroupId, 1)
+             )
+
 -- Multi valued self contained suqbuery
 -- IN
 --   Shows all classes on any day between monday and friday that is lecture
