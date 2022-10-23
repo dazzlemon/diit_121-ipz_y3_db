@@ -111,3 +111,25 @@ WHERE GroupId = ALL( SELECT GroupId
             WHERE [Day] = 1
               AND [Time] = '09:30:00'
           )
+
+
+-- Nested derived tables
+--   Select all groups (with week) that have just a single lecture that week
+SELECT GroupId, IsOddWeek
+FROM ( SELECT IsOddWeek
+            , GroupId
+            , "Class Type"
+            , COUNT("Class Type") AS "Count"
+       FROM ( SELECT IsOddWeek
+                   , GroupId
+                   , ClassType.Name AS "Class type"
+              FROM Schedule
+              JOIN Class ON Class.Id = ClassId
+              JOIN ClassType ON ClassType.Id = ClassTypeId
+            ) AS DerivedSchedule
+       GROUP BY IsOddWeek
+              , GroupId
+              , "Class Type"
+     ) AS DerivedTypeCount
+WHERE "Class Type" = 'Lecture'
+  AND "Count" = 1
