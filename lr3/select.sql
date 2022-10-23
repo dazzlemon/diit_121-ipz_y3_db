@@ -45,9 +45,9 @@ GROUP BY GroupId
 HAVING COUNT(*) = 2
 
 -- SELECT top 10% students with highest marks
-SELECT TOP 10 PERCENT WITH TIES *
+SELECT TOP 1 WITH TIES *
 FROM Student
-ORDER By Id -- imagine that they are ordered by theirs marks or something
+ORDER By GroupId -- imagine that they are ordered by theirs marks or something
 
 -- OFFSET, FETCH, FIRST, ROWS
 -- COALESCE
