@@ -270,3 +270,22 @@ WITH CHECK OPTION
 GO
 
 SELECT * FROM ScheduleTextView
+
+-- CROSS APPLY
+--   Time table for each student on monday
+SELECT DISTINCT Id
+              , [Time]
+FROM Student
+CROSS APPLY ScheduleTimeByGroupIdDay(Student.GroupId, 0)
+
+-- OUTER APPLY
+--   Time table for each student on monday
+--   with explicit day offs for all students
+SELECT DISTINCT Id
+              , COALESCE( CONVERT( VARCHAR
+                                 , [Time]
+                                 )
+                        , 'Day off'
+                        ) AS [Time table]
+FROM Student
+OUTER APPLY ScheduleTimeByGroupIdDay(Student.GroupId, 0)
