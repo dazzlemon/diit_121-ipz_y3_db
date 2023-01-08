@@ -1,6 +1,6 @@
 
--- Для початку зробимо альтери над таблицями для того щоб можна було використовувати сортування над певними полями
--- (Змінимо поля з типом TEXT -> VARCHAR)
+-- Р”Р»СЏ РїРѕС‡Р°С‚РєСѓ Р·СЂРѕР±РёРјРѕ Р°Р»СЊС‚РµСЂРё РЅР°Рґ С‚Р°Р±Р»РёС†СЏРјРё РґР»СЏ С‚РѕРіРѕ С‰РѕР± РјРѕР¶РЅР° Р±СѓР»Рѕ РІРёРєРѕСЂРёСЃС‚РѕРІСѓРІР°С‚Рё СЃРѕСЂС‚СѓРІР°РЅРЅСЏ РЅР°Рґ РїРµРІРЅРёРјРё РїРѕР»СЏРјРё
+-- (Р—РјС–РЅРёРјРѕ РїРѕР»СЏ Р· С‚РёРїРѕРј TEXT -> VARCHAR)
 IF EXISTS(SELECT TOP 1 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'student' AND COLUMN_NAME = 'firstname') BEGIN
     ALTER TABLE [student]
     ALTER COLUMN firstname VARCHAR(64)
@@ -26,10 +26,10 @@ GO
 -- Window functions
 
 -- 2.1.1 Ranking Window Functions. ROW_NUMBER
--- Наприклад, викладач хоче створити список учнів його групи за зворотним алфавітним порядком (від Z->A, від Я->А) 
+-- РќР°РїСЂРёРєР»Р°Рґ, РІРёРєР»Р°РґР°С‡ С…РѕС‡Рµ СЃС‚РІРѕСЂРёС‚Рё СЃРїРёСЃРѕРє СѓС‡РЅС–РІ Р№РѕРіРѕ РіСЂСѓРїРё Р·Р° Р·РІРѕСЂРѕС‚РЅРёРј Р°Р»С„Р°РІС–С‚РЅРёРј РїРѕСЂСЏРґРєРѕРј (РІС–Рґ Z->A, РІС–Рґ РЇ->Рђ) 
 BEGIN
 	DECLARE @teacherId INT = 1
-	-- Використовуємо каст до варчару, тому що не можна сортувати ы
+	-- Р’РёРєРѕСЂРёСЃС‚РѕРІСѓС”РјРѕ РєР°СЃС‚ РґРѕ РІР°СЂС‡Р°СЂСѓ, С‚РѕРјСѓ С‰Рѕ РЅРµ РјРѕР¶РЅР° СЃРѕСЂС‚СѓРІР°С‚Рё С‹
 	SELECT ROW_NUMBER() OVER(ORDER BY lastname DESC,firstname DESC) AS RowNumber,
 		   s.firstname,
 		   s.lastName
@@ -39,16 +39,16 @@ BEGIN
 END 
 
 -- 2.1.1 Ranking Window Functions. RANK
--- Наприклад, ректорат хоче створити список груп, які навчаються більше інших для побудови схеми загруженності учнів
+-- РќР°РїСЂРёРєР»Р°Рґ, СЂРµРєС‚РѕСЂР°С‚ С…РѕС‡Рµ СЃС‚РІРѕСЂРёС‚Рё СЃРїРёСЃРѕРє РіСЂСѓРї, СЏРєС– РЅР°РІС‡Р°СЋС‚СЊСЃСЏ Р±С–Р»СЊС€Рµ С–РЅС€РёС… РґР»СЏ РїРѕР±СѓРґРѕРІРё СЃС…РµРјРё Р·Р°РіСЂСѓР¶РµРЅРЅРѕСЃС‚С– СѓС‡РЅС–РІ
 BEGIN
 	SELECT groupId,
-		   RANK() OVER(ORDER BY groupId) AS Rank -- ступінь загруженності групи
+		   RANK() OVER(ORDER BY groupId) AS Rank -- СЃС‚СѓРїС–РЅСЊ Р·Р°РіСЂСѓР¶РµРЅРЅРѕСЃС‚С– РіСЂСѓРїРё
 	FROM schedule
 	GROUP BY groupId;
 END
 
 -- 2.1.1 Ranking Window Functions. DENSE_RANK
--- Тепер ректорат замислився над тим щоб знайти найбільш працелюбних викладачів та винагородити їх, тому створит список від найбільш загруженого викладача, до самого лінивого
+-- РўРµРїРµСЂ СЂРµРєС‚РѕСЂР°С‚ Р·Р°РјРёСЃР»РёРІСЃСЏ РЅР°Рґ С‚РёРј С‰РѕР± Р·РЅР°Р№С‚Рё РЅР°Р№Р±С–Р»СЊС€ РїСЂР°С†РµР»СЋР±РЅРёС… РІРёРєР»Р°РґР°С‡С–РІ С‚Р° РІРёРЅР°РіРѕСЂРѕРґРёС‚Рё С—С…, С‚РѕРјСѓ СЃС‚РІРѕСЂРёС‚ СЃРїРёСЃРѕРє РІС–Рґ РЅР°Р№Р±С–Р»СЊС€ Р·Р°РіСЂСѓР¶РµРЅРѕРіРѕ РІРёРєР»Р°РґР°С‡Р°, РґРѕ СЃР°РјРѕРіРѕ Р»С–РЅРёРІРѕРіРѕ
 BEGIN
 	SELECT t.lastname,
 		   t.firstname,
@@ -59,7 +59,7 @@ BEGIN
 END
 
 -- 2.1.1 Ranking Window Functions. NTILE
--- Давайте розподілимо учнів на 4 групи за алфвітним списком
+-- Р”Р°РІР°Р№С‚Рµ СЂРѕР·РїРѕРґС–Р»РёРјРѕ СѓС‡РЅС–РІ РЅР° 4 РіСЂСѓРїРё Р·Р° Р°Р»С„РІС–С‚РЅРёРј СЃРїРёСЃРєРѕРј
 BEGIN
 	SELECT firstname,
 		   lastname,
@@ -69,7 +69,7 @@ BEGIN
 END
 
 -- 2.1.2 Offset Window Functions. LAG
--- Давайте виведемо біля поточної пари ім'я вчителя з попередньої пари
+-- Р”Р°РІР°Р№С‚Рµ РІРёРІРµРґРµРјРѕ Р±С–Р»СЏ РїРѕС‚РѕС‡РЅРѕС— РїР°СЂРё С–Рј'СЏ РІС‡РёС‚РµР»СЏ Р· РїРѕРїРµСЂРµРґРЅСЊРѕС— РїР°СЂРё
 BEGIN
 	WITH mycte AS (
 		SELECT day, time, isOddWeek, classTypeId, classId, groupId, teacherId, roomId
@@ -84,7 +84,7 @@ BEGIN
 END
 
 -- 2.1.2 Offset Window Functions. LEAD
--- Давайте виведемо біля пари час наступної пари щоб можна було одразу зрозуміти чи буде час щоб перекусити
+-- Р”Р°РІР°Р№С‚Рµ РІРёРІРµРґРµРјРѕ Р±С–Р»СЏ РїР°СЂРё С‡Р°СЃ РЅР°СЃС‚СѓРїРЅРѕС— РїР°СЂРё С‰РѕР± РјРѕР¶РЅР° Р±СѓР»Рѕ РѕРґСЂР°Р·Сѓ Р·СЂРѕР·СѓРјС–С‚Рё С‡Рё Р±СѓРґРµ С‡Р°СЃ С‰РѕР± РїРµСЂРµРєСѓСЃРёС‚Рё
 BEGIN
 	WITH mycte AS (
 		SELECT day, time, isOddWeek, classTypeId, classId, groupId, teacherId, roomId
@@ -98,7 +98,7 @@ BEGIN
 END
 
 -- 2.1.2 Offset Window Functions. FIRST_VALUE
--- Давайте виведемо прізвище першого учня в кожній групі
+-- Р”Р°РІР°Р№С‚Рµ РІРёРІРµРґРµРјРѕ РїСЂС–Р·РІРёС‰Рµ РїРµСЂС€РѕРіРѕ СѓС‡РЅСЏ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–
 BEGIN
 	WITH mycte AS (
 		SELECT RANK() OVER(PARTITION BY s.groupId ORDER BY s.lastname) as rankId,
@@ -113,7 +113,7 @@ BEGIN
 END
 
 -- 2.1.2 Offset Window Functions. LAST_VALUE
--- Тепер давайте виведемо прізвище останнього учня в кожній групі
+-- РўРµРїРµСЂ РґР°РІР°Р№С‚Рµ РІРёРІРµРґРµРјРѕ РїСЂС–Р·РІРёС‰Рµ РѕСЃС‚Р°РЅРЅСЊРѕРіРѕ СѓС‡РЅСЏ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–
 BEGIN
 	WITH mycte AS (
 		SELECT RANK() OVER(PARTITION BY s.groupId ORDER BY s.lastname DESC) as rankId,
@@ -128,27 +128,27 @@ BEGIN
 END
 
 -- 2.1.3 Aggregate  Window Functions. COUNT
--- Виведемо кіл-ть студентів в кожній групі
+-- Р’РёРІРµРґРµРјРѕ РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–
 BEGIN
 	SELECT groupId,
-		COUNT(1) AS count -- кіл-ть студентів в кожній групі   
+		COUNT(1) AS count -- РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–   
 	FROM student
 	GROUP BY groupId
 END
 
 -- 2.1.3 Aggregate  Window Functions. AVG
--- Виведемо середню кіл-ть студентів в кожній групі
+-- Р’РёРІРµРґРµРјРѕ СЃРµСЂРµРґРЅСЋ РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–
 BEGIN
 	SELECT AVG(count) AS averageStudentsCountPerGroup
 	FROM (
-		SELECT COUNT(1) AS count -- кіл-ть студентів в кожній групі
+		SELECT COUNT(1) AS count -- РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–
 		FROM student
 		GROUP BY groupId
 	) AS counts
 END
 
 -- 2.1.3 Aggregate  Window Functions. MAX
--- Виведемо час останньої пари на першому тижні
+-- Р’РёРІРµРґРµРјРѕ С‡Р°СЃ РѕСЃС‚Р°РЅРЅСЊРѕС— РїР°СЂРё РЅР° РїРµСЂС€РѕРјСѓ С‚РёР¶РЅС–
 BEGIN
 	SELECT TOP 1 MAX(time) AS lastParaTime
 	FROM schedule
@@ -158,7 +158,7 @@ BEGIN
 END
 
 -- 2.1.3 Aggregate  Window Functions. MIN
--- Виведемо час першої пари на другому тижні
+-- Р’РёРІРµРґРµРјРѕ С‡Р°СЃ РїРµСЂС€РѕС— РїР°СЂРё РЅР° РґСЂСѓРіРѕРјСѓ С‚РёР¶РЅС–
 BEGIN
 	SELECT TOP 1 MIN(time) AS firstParaTime
 	FROM schedule
@@ -168,7 +168,7 @@ BEGIN
 END
 
 -- 2.1.3 Aggregate  Window Functions. SUM
--- Виведемо загальну кіл-ть студентів і викладачів
+-- Р’РёРІРµРґРµРјРѕ Р·Р°РіР°Р»СЊРЅСѓ РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ С– РІРёРєР»Р°РґР°С‡С–РІ
 BEGIN
 	DECLARE @studentsCount INT
 	DECLARE @teachersCount INT
@@ -183,7 +183,7 @@ BEGIN
 END
 
 -- 2.2 PIVOT
--- Виведемо групу та кіл-ть пар в кожний з днів тижня
+-- Р’РёРІРµРґРµРјРѕ РіСЂСѓРїСѓ С‚Р° РєС–Р»-С‚СЊ РїР°СЂ РІ РєРѕР¶РЅРёР№ Р· РґРЅС–РІ С‚РёР¶РЅСЏ
 BEGIN
 	SELECT groupId,
 	       [0] AS Monday,
@@ -202,7 +202,7 @@ BEGIN
 END
 
 -- 2.3 UNPIVOT
--- Візьмемо таблицю з попереднього запиту і перетворимо її на структуру: groupId, day
+-- Р’С–Р·СЊРјРµРјРѕ С‚Р°Р±Р»РёС†СЋ Р· РїРѕРїРµСЂРµРґРЅСЊРѕРіРѕ Р·Р°РїРёС‚Сѓ С– РїРµСЂРµС‚РІРѕСЂРёРјРѕ С—С— РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ: groupId, day
 BEGIN
 	DECLARE @pivotTable TABLE (groupId INT, monday int, tuesday int, wednesday int, thursday int, friday int, saturday int, sunday int)
 	INSERT INTO @pivotTable
@@ -231,7 +231,7 @@ BEGIN
 END
 
 -- 2.4 GROUPING SETS
--- Виведемо кіл-ть студентів в кожній групі використовуючи GROUPING SETS
+-- Р’РёРІРµРґРµРјРѕ РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС– РІРёРєРѕСЂРёСЃС‚РѕРІСѓСЋС‡Рё GROUPING SETS
 BEGIN
 	SELECT groupId,
 		   COUNT(1) AS studentsPerGroup
@@ -241,7 +241,7 @@ BEGIN
 END
 
 -- 2.5 CUBE
--- Тепер виведемо не тільки кіл-ть студентів в кожній групі, а ще й загальну суму студентів
+-- РўРµРїРµСЂ РІРёРІРµРґРµРјРѕ РЅРµ С‚С–Р»СЊРєРё РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–, Р° С‰Рµ Р№ Р·Р°РіР°Р»СЊРЅСѓ СЃСѓРјСѓ СЃС‚СѓРґРµРЅС‚С–РІ
 BEGIN
 	SELECT groupId,
 		   COUNT(1) AS studentsPerGroup
@@ -251,8 +251,8 @@ BEGIN
 END
 
 -- 2.6 ROLLUP
--- Тепер виведемо не тільки кіл-ть студентів в кожній групі, а ще й загальну суму студентів
--- ROLLUP майже такий самий як і CUBE, але CUBE згенерує ще під-тотал для всіх комбінацій груп
+-- РўРµРїРµСЂ РІРёРІРµРґРµРјРѕ РЅРµ С‚С–Р»СЊРєРё РєС–Р»-С‚СЊ СЃС‚СѓРґРµРЅС‚С–РІ РІ РєРѕР¶РЅС–Р№ РіСЂСѓРїС–, Р° С‰Рµ Р№ Р·Р°РіР°Р»СЊРЅСѓ СЃСѓРјСѓ СЃС‚СѓРґРµРЅС‚С–РІ
+-- ROLLUP РјР°Р№Р¶Рµ С‚Р°РєРёР№ СЃР°РјРёР№ СЏРє С– CUBE, Р°Р»Рµ CUBE Р·РіРµРЅРµСЂСѓС” С‰Рµ РїС–Рґ-С‚РѕС‚Р°Р» РґР»СЏ РІСЃС–С… РєРѕРјР±С–РЅР°С†С–Р№ РіСЂСѓРї
 BEGIN
 	SELECT ISNULL(groupId, 0) AS groupId,
 		   COUNT(1) AS studentsPerGroup
@@ -262,7 +262,7 @@ BEGIN
 END
 
 -- 2.7 GROUPING()
--- Покажемо який рядок є згрупованим серед усіх
+-- РџРѕРєР°Р¶РµРјРѕ СЏРєРёР№ СЂСЏРґРѕРє С” Р·РіСЂСѓРїРѕРІР°РЅРёРј СЃРµСЂРµРґ СѓСЃС–С…
 BEGIN
 	SELECT groupId,
 		   COUNT(1) AS studentsPerGroup,
@@ -272,7 +272,7 @@ BEGIN
 END
 
 -- 2.8 GROUPING_ID()
--- GROUPING_ID() такий самий як і GROUPING, різниця лиш в тому що GROUPING_ID() може працювати з декількома полями одночасно
+-- GROUPING_ID() С‚Р°РєРёР№ СЃР°РјРёР№ СЏРє С– GROUPING, СЂС–Р·РЅРёС†СЏ Р»РёС€ РІ С‚РѕРјСѓ С‰Рѕ GROUPING_ID() РјРѕР¶Рµ РїСЂР°С†СЋРІР°С‚Рё Р· РґРµРєС–Р»СЊРєРѕРјР° РїРѕР»СЏРјРё РѕРґРЅРѕС‡Р°СЃРЅРѕ
 BEGIN
 	SELECT groupId, firstname,
 		   COUNT(1) AS studentsPerGroup,
@@ -282,7 +282,7 @@ BEGIN
 END
 
 -- 2.9.1 INSERT VALUES
--- Спробуємо додати декілька нових студентів
+-- РЎРїСЂРѕР±СѓС”РјРѕ РґРѕРґР°С‚Рё РґРµРєС–Р»СЊРєР° РЅРѕРІРёС… СЃС‚СѓРґРµРЅС‚С–РІ
 BEGIN
 	INSERT INTO student (firstname, lastname, groupId)
 	VALUES ('Patrick', 'Bateman', 936),
@@ -290,14 +290,14 @@ BEGIN
 END
 
 -- 2.9.2 INSERT SELECT
--- Спробуємо додати хайзенберга до списку викладачів хімфаку
+-- РЎРїСЂРѕР±СѓС”РјРѕ РґРѕРґР°С‚Рё С…Р°Р№Р·РµРЅР±РµСЂРіР° РґРѕ СЃРїРёСЃРєСѓ РІРёРєР»Р°РґР°С‡С–РІ С…С–РјС„Р°РєСѓ
 BEGIN
 	INSERT INTO teacher
 	SELECT 'Walter', 'White'
 END
 
 -- 2.9.3 INSERT EXEC
--- Додамо ще одного викладача
+-- Р”РѕРґР°РјРѕ С‰Рµ РѕРґРЅРѕРіРѕ РІРёРєР»Р°РґР°С‡Р°
 BEGIN
 	DECLARE @q nvarchar(64) = ' SELECT ''Tony'', ''Soprano'' '
 	INSERT INTO teacher (firstname, lastname)
@@ -305,7 +305,7 @@ BEGIN
 END
 
 -- 2.9.4 SELECT INTO
--- SELECT INTO створює нову таблицю в звичайній файлгрупі і додає дані саме туди, тому давайте спробуємо додати дані в тимчасову табличку
+-- SELECT INTO СЃС‚РІРѕСЂСЋС” РЅРѕРІСѓ С‚Р°Р±Р»РёС†СЋ РІ Р·РІРёС‡Р°Р№РЅС–Р№ С„Р°Р№Р»РіСЂСѓРїС– С– РґРѕРґР°С” РґР°РЅС– СЃР°РјРµ С‚СѓРґРё, С‚РѕРјСѓ РґР°РІР°Р№С‚Рµ СЃРїСЂРѕР±СѓС”РјРѕ РґРѕРґР°С‚Рё РґР°РЅС– РІ С‚РёРјС‡Р°СЃРѕРІСѓ С‚Р°Р±Р»РёС‡РєСѓ
 BEGIN
 	IF OBJECT_ID('tempdb..#tmpTable') IS NOT NULL DROP TABLE #tmpTable
 	GO
@@ -316,7 +316,7 @@ BEGIN
 END
 
 -- 2.9.5 BULK INSERT
--- Додамо нового студента з файлу 'new_students.csv'
+-- Р”РѕРґР°РјРѕ РЅРѕРІРѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° Р· С„Р°Р№Р»Сѓ 'new_students.csv'
 BEGIN
 	BULK INSERT student
 	FROM '~/new_students.csv'
@@ -328,7 +328,7 @@ BEGIN
 END
 
 -- 2.10.1 $identity
--- Повертає нам стовпчик з таблиці, який має тип IDENTITY
+-- РџРѕРІРµСЂС‚Р°С” РЅР°Рј СЃС‚РѕРІРїС‡РёРє Р· С‚Р°Р±Р»РёС†С–, СЏРєРёР№ РјР°С” С‚РёРї IDENTITY
 BEGIN
 	DECLARE @tableVariable TABLE (myidentity INT IDENTITY(1,1) PRIMARY KEY, ch CHAR(1))
 	INSERT INTO @tableVariable (ch) VALUES ('s'), ('i'), ('g'), ('m'), ('a')
@@ -338,7 +338,7 @@ BEGIN
 END
 
 -- 2.10.2 @@identity
--- Повертає нам номер останньо доданого рядка. Обмежена поточним сеансом
+-- РџРѕРІРµСЂС‚Р°С” РЅР°Рј РЅРѕРјРµСЂ РѕСЃС‚Р°РЅРЅСЊРѕ РґРѕРґР°РЅРѕРіРѕ СЂСЏРґРєР°. РћР±РјРµР¶РµРЅР° РїРѕС‚РѕС‡РЅРёРј СЃРµР°РЅСЃРѕРј
 BEGIN
 	SELECT MAX(id)
 	FROM student;
@@ -350,7 +350,7 @@ BEGIN
 END
 
 -- 2.10.3 SCOPE_IDENTITY()
--- Обмежена поточним сеансом та областю дії
+-- РћР±РјРµР¶РµРЅР° РїРѕС‚РѕС‡РЅРёРј СЃРµР°РЅСЃРѕРј С‚Р° РѕР±Р»Р°СЃС‚СЋ РґС–С—
 BEGIN
 	SELECT MAX(id)
 	FROM class;
@@ -361,7 +361,7 @@ BEGIN
 END
 
 -- 2.10.4 IDENT_CURRENT('table name')
--- Необмежена областю дії та сеансом, але обмежена вказанням таблиці
+-- РќРµРѕР±РјРµР¶РµРЅР° РѕР±Р»Р°СЃС‚СЋ РґС–С— С‚Р° СЃРµР°РЅСЃРѕРј, Р°Р»Рµ РѕР±РјРµР¶РµРЅР° РІРєР°Р·Р°РЅРЅСЏРј С‚Р°Р±Р»РёС†С–
 BEGIN
 	SELECT MAX(id)
 	FROM class;
@@ -372,22 +372,22 @@ BEGIN
 END
 
 -- 2.10.5 IDENT_INSERT
--- Дозволяє додавати явно змінні в identity поле
+-- Р”РѕР·РІРѕР»СЏС” РґРѕРґР°РІР°С‚Рё СЏРІРЅРѕ Р·РјС–РЅРЅС– РІ identity РїРѕР»Рµ
 BEGIN
 	DECLARE @id INT = 5
 	DECLARE @name VARCHAR(64)
 
-	-- Запам'ятовуємо значення по айдішнику
+	-- Р—Р°РїР°Рј'СЏС‚РѕРІСѓС”РјРѕ Р·РЅР°С‡РµРЅРЅСЏ РїРѕ Р°Р№РґС–С€РЅРёРєСѓ
 	SELECT @name = name
 	FROM class
 	WHERE id = @id
 
-	-- Робимо простір між значеннями identity
+	-- Р РѕР±РёРјРѕ РїСЂРѕСЃС‚С–СЂ РјС–Р¶ Р·РЅР°С‡РµРЅРЅСЏРјРё identity
 	DELETE class
 	WHERE id = @id
 
 	SET IDENTITY_INSERT class ON;
-	INSERT INTO class (id, name) VALUES (@id, @name); -- Якби не було виставлено значення IDENTITY_INSERT ON, в нас би виникла тут помилка
+	INSERT INTO class (id, name) VALUES (@id, @name); -- РЇРєР±Рё РЅРµ Р±СѓР»Рѕ РІРёСЃС‚Р°РІР»РµРЅРѕ Р·РЅР°С‡РµРЅРЅСЏ IDENTITY_INSERT ON, РІ РЅР°СЃ Р±Рё РІРёРЅРёРєР»Р° С‚СѓС‚ РїРѕРјРёР»РєР°
 	SET IDENTITY_INSERT class OFF;
 END
 
@@ -398,26 +398,26 @@ BEGIN
 
 	CREATE SEQUENCE students_seq
 	AS BIGINT
-	START WITH 1     -- Початкове значення послідовності
-	INCREMENT BY 1   -- На яке значення збільшувати значення
-	MINVALUE 1       -- Мінімальне значення в послідовності
-	MAXVALUE 99999   -- Максимальне значення в послідовності
-	NO CYCLE	     -- Не скидати послідовність після того як дійшло до макс.значення
-	CACHE 10;        -- Запам'ятовувати кожні витягнуті 10 значень з послідовності
+	START WITH 1     -- РџРѕС‡Р°С‚РєРѕРІРµ Р·РЅР°С‡РµРЅРЅСЏ РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С–
+	INCREMENT BY 1   -- РќР° СЏРєРµ Р·РЅР°С‡РµРЅРЅСЏ Р·Р±С–Р»СЊС€СѓРІР°С‚Рё Р·РЅР°С‡РµРЅРЅСЏ
+	MINVALUE 1       -- РњС–РЅС–РјР°Р»СЊРЅРµ Р·РЅР°С‡РµРЅРЅСЏ РІ РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С–
+	MAXVALUE 99999   -- РњР°РєСЃРёРјР°Р»СЊРЅРµ Р·РЅР°С‡РµРЅРЅСЏ РІ РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С–
+	NO CYCLE	     -- РќРµ СЃРєРёРґР°С‚Рё РїРѕСЃР»С–РґРѕРІРЅС–СЃС‚СЊ РїС–СЃР»СЏ С‚РѕРіРѕ СЏРє РґС–Р№С€Р»Рѕ РґРѕ РјР°РєСЃ.Р·РЅР°С‡РµРЅРЅСЏ
+	CACHE 10;        -- Р—Р°РїР°Рј'СЏС‚РѕРІСѓРІР°С‚Рё РєРѕР¶РЅС– РІРёС‚СЏРіРЅСѓС‚С– 10 Р·РЅР°С‡РµРЅСЊ Р· РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С–
 
-	SELECT NEXT VALUE FOR students_seq; -- Дістаємо наступне значення з послідовності
-	SELECT NEXT VALUE FOR students_seq; -- Дістаємо наступне значення з послідовності
+	SELECT NEXT VALUE FOR students_seq; -- Р”С–СЃС‚Р°С”РјРѕ РЅР°СЃС‚СѓРїРЅРµ Р·РЅР°С‡РµРЅРЅСЏ Р· РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С–
+	SELECT NEXT VALUE FOR students_seq; -- Р”С–СЃС‚Р°С”РјРѕ РЅР°СЃС‚СѓРїРЅРµ Р·РЅР°С‡РµРЅРЅСЏ Р· РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С–
 END
 
 -- 2.12.1 sys.sequences view
 BEGIN
-	-- Якщо хочемо побачити які є послідовності на цій бд - виконаємо такий запит 
+	-- РЇРєС‰Рѕ С…РѕС‡РµРјРѕ РїРѕР±Р°С‡РёС‚Рё СЏРєС– С” РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С– РЅР° С†С–Р№ Р±Рґ - РІРёРєРѕРЅР°С”РјРѕ С‚Р°РєРёР№ Р·Р°РїРёС‚ 
 	SELECT * FROM sys.sequences
 END
 
 -- 2.12.2 sp_sequence_get_range
 BEGIN
-	-- Дістанемо наступні 10 значень з послідовності, яку створили в пункті 2.11
+	-- Р”С–СЃС‚Р°РЅРµРјРѕ РЅР°СЃС‚СѓРїРЅС– 10 Р·РЅР°С‡РµРЅСЊ Р· РїРѕСЃР»С–РґРѕРІРЅРѕСЃС‚С–, СЏРєСѓ СЃС‚РІРѕСЂРёР»Рё РІ РїСѓРЅРєС‚С– 2.11
 	DECLARE @range_first_value_output sql_variant;
 	DECLARE @range_size INT = 10
 	EXEC sp_sequence_get_range @sequence_name = 'students_seq', @range_size = @range_size, @range_first_value = @range_first_value_output OUTPUT;
@@ -426,17 +426,17 @@ BEGIN
 END
 
 -- 2.13 DELETE
--- Видалимо студента Гомера Сімпсона з бази даних, через те що він погано вчився
+-- Р’РёРґР°Р»РёРјРѕ СЃС‚СѓРґРµРЅС‚Р° Р“РѕРјРµСЂР° РЎС–РјРїСЃРѕРЅР° Р· Р±Р°Р·Рё РґР°РЅРёС…, С‡РµСЂРµР· С‚Рµ С‰Рѕ РІС–РЅ РїРѕРіР°РЅРѕ РІС‡РёРІСЃСЏ
 BEGIN
-	-- Краще було б видалити через поле id, але для того щоб показати що можна видаляти і за декількома полями використаємо такий синтаксис
+	-- РљСЂР°С‰Рµ Р±СѓР»Рѕ Р± РІРёРґР°Р»РёС‚Рё С‡РµСЂРµР· РїРѕР»Рµ id, Р°Р»Рµ РґР»СЏ С‚РѕРіРѕ С‰РѕР± РїРѕРєР°Р·Р°С‚Рё С‰Рѕ РјРѕР¶РЅР° РІРёРґР°Р»СЏС‚Рё С– Р·Р° РґРµРєС–Р»СЊРєРѕРјР° РїРѕР»СЏРјРё РІРёРєРѕСЂРёСЃС‚Р°С”РјРѕ С‚Р°РєРёР№ СЃРёРЅС‚Р°РєСЃРёСЃ
 	DELETE FROM student
 	WHERE firstName = 'Homer' AND lastName = 'Simpson' AND groupId = 936;
 END
 
 -- 2.14 TRUNCATE
--- TRUNCATE використовується для того, щоб видалити всі записи з таблиці. Але він залишає поля, індекси та обмеження. (identity поле скидається на замовчуване або 1)
+-- TRUNCATE РІРёРєРѕСЂРёСЃС‚РѕРІСѓС”С‚СЊСЃСЏ РґР»СЏ С‚РѕРіРѕ, С‰РѕР± РІРёРґР°Р»РёС‚Рё РІСЃС– Р·Р°РїРёСЃРё Р· С‚Р°Р±Р»РёС†С–. РђР»Рµ РІС–РЅ Р·Р°Р»РёС€Р°С” РїРѕР»СЏ, С–РЅРґРµРєСЃРё С‚Р° РѕР±РјРµР¶РµРЅРЅСЏ. (identity РїРѕР»Рµ СЃРєРёРґР°С”С‚СЊСЃСЏ РЅР° Р·Р°РјРѕРІС‡СѓРІР°РЅРµ Р°Р±Рѕ 1)
 BEGIN
-	-- TRUNCATE схожий на DELETE без WHERE, але він швидший і використовує менше ресурсів
+	-- TRUNCATE СЃС…РѕР¶РёР№ РЅР° DELETE Р±РµР· WHERE, Р°Р»Рµ РІС–РЅ С€РІРёРґС€РёР№ С– РІРёРєРѕСЂРёСЃС‚РѕРІСѓС” РјРµРЅС€Рµ СЂРµСЃСѓСЂСЃС–РІ
 	IF OBJECT_ID('tempdb..#tmpTable2') IS NOT NULL DROP TABLE #tmpTable2
 	GO
 
@@ -454,7 +454,7 @@ BEGIN
 END
 
 -- 2.15 UPDATE
--- Адмін був неуважний і неправильно написав ім'я останнього учня що додав до бази даних, тому одразу написав такий запит щоб відредагувати ім'я на правильне
+-- РђРґРјС–РЅ Р±СѓРІ РЅРµСѓРІР°Р¶РЅРёР№ С– РЅРµРїСЂР°РІРёР»СЊРЅРѕ РЅР°РїРёСЃР°РІ С–Рј'СЏ РѕСЃС‚Р°РЅРЅСЊРѕРіРѕ СѓС‡РЅСЏ С‰Рѕ РґРѕРґР°РІ РґРѕ Р±Р°Р·Рё РґР°РЅРёС…, С‚РѕРјСѓ РѕРґСЂР°Р·Сѓ РЅР°РїРёСЃР°РІ С‚Р°РєРёР№ Р·Р°РїРёС‚ С‰РѕР± РІС–РґСЂРµРґР°РіСѓРІР°С‚Рё С–Рј'СЏ РЅР° РїСЂР°РІРёР»СЊРЅРµ
 BEGIN
 	UPDATE student
 	SET firstname = 'Bobby'
@@ -462,9 +462,9 @@ BEGIN
 END
 
 -- 2.16.1 MERGE. WHEN MATCHED THEN. WHEN NOT MATCHED THEN
--- Уявімо ситуація що нам треба оновити дані про викладача, а якщо його ще не додано до таблиці - створити новий рядок
+-- РЈСЏРІС–РјРѕ СЃРёС‚СѓР°С†С–СЏ С‰Рѕ РЅР°Рј С‚СЂРµР±Р° РѕРЅРѕРІРёС‚Рё РґР°РЅС– РїСЂРѕ РІРёРєР»Р°РґР°С‡Р°, Р° СЏРєС‰Рѕ Р№РѕРіРѕ С‰Рµ РЅРµ РґРѕРґР°РЅРѕ РґРѕ С‚Р°Р±Р»РёС†С– - СЃС‚РІРѕСЂРёС‚Рё РЅРѕРІРёР№ СЂСЏРґРѕРє
 BEGIN
-	-- Створимо для цього невеличку процедуру
+	-- РЎС‚РІРѕСЂРёРјРѕ РґР»СЏ С†СЊРѕРіРѕ РЅРµРІРµР»РёС‡РєСѓ РїСЂРѕС†РµРґСѓСЂСѓ
 	IF OBJECT_ID(N'[dbo].[InsertTeacher]', N'P') IS NULL
 		EXEC('CREATE PROCEDURE [dbo].[InsertTeacher] AS SET NOCOUNT ON;')
 	GO
@@ -477,15 +477,15 @@ BEGIN
 		MERGE teacher AS target
 		USING (SELECT @firstName, @lastName) AS source (firstName, lastName)
 		ON (target.lastName = source.lastName)
-		WHEN MATCHED THEN -- Якщо умова вище виконана, то виконається операція UPDATE
+		WHEN MATCHED THEN -- РЇРєС‰Рѕ СѓРјРѕРІР° РІРёС‰Рµ РІРёРєРѕРЅР°РЅР°, С‚Рѕ РІРёРєРѕРЅР°С”С‚СЊСЃСЏ РѕРїРµСЂР°С†С–СЏ UPDATE
 			UPDATE SET firstName = source.firstName
-		WHEN NOT MATCHED THEN -- Якщо не виконана - операція INSERT
+		WHEN NOT MATCHED THEN -- РЇРєС‰Рѕ РЅРµ РІРёРєРѕРЅР°РЅР° - РѕРїРµСЂР°С†С–СЏ INSERT
 			INSERT (firstName, lastName)
 			VALUES (source.firstName, source.lastName);
 	END
 	GO
 	
-	-- Протестуємо процедуру
+	-- РџСЂРѕС‚РµСЃС‚СѓС”РјРѕ РїСЂРѕС†РµРґСѓСЂСѓ
 	DECLARE @lastName VARCHAR(64) = 'Pennyworth'
 	EXEC InsertTeacher @firstName = 'Alfred', @lastName = @lastName
 	EXEC InsertTeacher @firstName = 'Saxon', @lastName = @lastName
@@ -496,7 +496,7 @@ BEGIN
 END
 
 -- 2.16.2 MERGE. WHEN MATCHED AND ... THEN. WHEN NOT MATCHED BY TARGET THEN
--- Тепер давайте побудуємо схожу процедуру і для студентів
+-- РўРµРїРµСЂ РґР°РІР°Р№С‚Рµ РїРѕР±СѓРґСѓС”РјРѕ СЃС…РѕР¶Сѓ РїСЂРѕС†РµРґСѓСЂСѓ С– РґР»СЏ СЃС‚СѓРґРµРЅС‚С–РІ
 BEGIN
 	IF OBJECT_ID(N'[dbo].[InsertStudent]', N'P') IS NULL
 		EXEC('CREATE PROCEDURE [dbo].[InsertStudent] AS SET NOCOUNT ON;')
@@ -511,9 +511,9 @@ BEGIN
 		MERGE student AS target
 		USING (SELECT @firstName, @lastName, @groupId) AS source (firstName, lastName, groupId)
 		ON (target.lastName = source.lastName AND target.firstName = source.firstName)
-		WHEN MATCHED AND source.groupId IS NOT NULL THEN -- Якщо умова вище виконана і передана група буде непорожня, то оновимо групу в якій навчається студент
+		WHEN MATCHED AND source.groupId IS NOT NULL THEN -- РЇРєС‰Рѕ СѓРјРѕРІР° РІРёС‰Рµ РІРёРєРѕРЅР°РЅР° С– РїРµСЂРµРґР°РЅР° РіСЂСѓРїР° Р±СѓРґРµ РЅРµРїРѕСЂРѕР¶РЅСЏ, С‚Рѕ РѕРЅРѕРІРёРјРѕ РіСЂСѓРїСѓ РІ СЏРєС–Р№ РЅР°РІС‡Р°С”С‚СЊСЃСЏ СЃС‚СѓРґРµРЅС‚
 			UPDATE SET groupId = source.groupId
-		WHEN NOT MATCHED BY TARGET THEN -- Якщо такого студента ще немає - додамо його
+		WHEN NOT MATCHED BY TARGET THEN -- РЇРєС‰Рѕ С‚Р°РєРѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° С‰Рµ РЅРµРјР°С” - РґРѕРґР°РјРѕ Р№РѕРіРѕ
 			INSERT (firstName, lastName, groupId)
 			VALUES (source.firstName, source.lastName, source.groupId);	
 	END
@@ -533,7 +533,7 @@ BEGIN
 END
 
 -- 2.17 INSERT ... OUTPUT
--- Збережемо айді доданого рядка
+-- Р—Р±РµСЂРµР¶РµРјРѕ Р°Р№РґС– РґРѕРґР°РЅРѕРіРѕ СЂСЏРґРєР°
 BEGIN
 	DECLARE @tableVariable TABLE (id INT)
 
@@ -541,53 +541,53 @@ BEGIN
 	OUTPUT INSERTED.ID INTO @tableVariable(ID)
 	VALUES ('geoinformation theory')
 
-	-- Перевіряємо що в нас дійсно той самий айді новоствореного рядка
+	-- РџРµСЂРµРІС–СЂСЏС”РјРѕ С‰Рѕ РІ РЅР°СЃ РґС–Р№СЃРЅРѕ С‚РѕР№ СЃР°РјРёР№ Р°Р№РґС– РЅРѕРІРѕСЃС‚РІРѕСЂРµРЅРѕРіРѕ СЂСЏРґРєР°
 	SELECT c.id, c.name
 	FROM @tableVariable AS t
 	JOIN class AS c ON c.id = t.id
 END
 
 -- 2.18  DELETE ... OUTPUT
--- Збережемо айді видаленого рядка
+-- Р—Р±РµСЂРµР¶РµРјРѕ Р°Р№РґС– РІРёРґР°Р»РµРЅРѕРіРѕ СЂСЏРґРєР°
 BEGIN
 	DECLARE @tableVariable TABLE (id INT)
 	DECLARE @name VARCHAR(32) = 'mobile development'
 	DECLARE @deletedId INT
-	SELECT @deletedId = id FROM class WHERE name = @name -- Запам'ятовуємо айдішник 
+	SELECT @deletedId = id FROM class WHERE name = @name -- Р—Р°РїР°Рј'СЏС‚РѕРІСѓС”РјРѕ Р°Р№РґС–С€РЅРёРє 
 
 	DELETE FROM class
 	OUTPUT DELETED.ID INTO @tableVariable(ID)
 	WHERE name = @name
 
-	-- Перевіряємо що в нас зберігся видалений айдішник
-	SELECT CASE WHEN id = @deletedId THEN 'Айді співпадають'
-		       ELSE 'Айді не співпадають. Кернел панік'
+	-- РџРµСЂРµРІС–СЂСЏС”РјРѕ С‰Рѕ РІ РЅР°СЃ Р·Р±РµСЂС–РіСЃСЏ РІРёРґР°Р»РµРЅРёР№ Р°Р№РґС–С€РЅРёРє
+	SELECT CASE WHEN id = @deletedId THEN 'РђР№РґС– СЃРїС–РІРїР°РґР°СЋС‚СЊ'
+		       ELSE 'РђР№РґС– РЅРµ СЃРїС–РІРїР°РґР°СЋС‚СЊ. РљРµСЂРЅРµР» РїР°РЅС–Рє'
 		   END
 	FROM @tableVariable
 END
 
 -- 2.19  UPDATE ... OUTPUT
--- Збережемо айді зміненого рядка
+-- Р—Р±РµСЂРµР¶РµРјРѕ Р°Р№РґС– Р·РјС–РЅРµРЅРѕРіРѕ СЂСЏРґРєР°
 BEGIN
 	DECLARE @tableVariable TABLE (id INT)
 	DECLARE @firstname VARCHAR(32) = 'Frank'
 	DECLARE @groupId INT = 964
 	DECLARE @updatedId INT
-	SELECT @updatedId = id FROM student WHERE firstname = @firstname AND groupId = @groupId -- Запам'ятовуємо айдішник 
+	SELECT @updatedId = id FROM student WHERE firstname = @firstname AND groupId = @groupId -- Р—Р°РїР°Рј'СЏС‚РѕРІСѓС”РјРѕ Р°Р№РґС–С€РЅРёРє 
 
 	UPDATE student SET lastname = 'Sinatra'
 	OUTPUT INSERTED.ID INTO @tableVariable(ID)
 	WHERE firstname = @firstname AND groupId = @groupId
 
-	-- Перевіряємо що в нас зберігся айдішник рядка який ми міняли
-	SELECT CASE WHEN id = @updatedId THEN 'Айді співпадають'
-		       ELSE 'Айді не співпадають. Кернел панік'
+	-- РџРµСЂРµРІС–СЂСЏС”РјРѕ С‰Рѕ РІ РЅР°СЃ Р·Р±РµСЂС–РіСЃСЏ Р°Р№РґС–С€РЅРёРє СЂСЏРґРєР° СЏРєРёР№ РјРё РјС–РЅСЏР»Рё
+	SELECT CASE WHEN id = @updatedId THEN 'РђР№РґС– СЃРїС–РІРїР°РґР°СЋС‚СЊ'
+		       ELSE 'РђР№РґС– РЅРµ СЃРїС–РІРїР°РґР°СЋС‚СЊ. РљРµСЂРЅРµР» РїР°РЅС–Рє'
 		   END
 	FROM @tableVariable
 END
 
 -- 2.20  MERGE ... OUTPUT
--- Візьмемо за основу процедуру з пункта 2.16.1 і будемо повертати дію яка виконалась над таблицею 
+-- Р’С–Р·СЊРјРµРјРѕ Р·Р° РѕСЃРЅРѕРІСѓ РїСЂРѕС†РµРґСѓСЂСѓ Р· РїСѓРЅРєС‚Р° 2.16.1 С– Р±СѓРґРµРјРѕ РїРѕРІРµСЂС‚Р°С‚Рё РґС–СЋ СЏРєР° РІРёРєРѕРЅР°Р»Р°СЃСЊ РЅР°Рґ С‚Р°Р±Р»РёС†РµСЋ 
 BEGIN
 	DECLARE @firstName VARCHAR(32) = 'Cruso'
 	DECLARE @lastName VARCHAR(32) = 'Robbinzon'
@@ -596,10 +596,10 @@ BEGIN
 	MERGE student AS target
 	USING (SELECT @firstName, @lastName, @groupId) AS source (firstName, lastName, groupId)
 	ON (target.lastName = source.lastName AND target.firstName = source.firstName)
-	WHEN MATCHED AND source.groupId IS NOT NULL THEN -- Якщо умова вище виконана і передана група буде непорожня, то оновимо групу в якійнавчається студент
+	WHEN MATCHED AND source.groupId IS NOT NULL THEN -- РЇРєС‰Рѕ СѓРјРѕРІР° РІРёС‰Рµ РІРёРєРѕРЅР°РЅР° С– РїРµСЂРµРґР°РЅР° РіСЂСѓРїР° Р±СѓРґРµ РЅРµРїРѕСЂРѕР¶РЅСЏ, С‚Рѕ РѕРЅРѕРІРёРјРѕ РіСЂСѓРїСѓ РІ СЏРєС–Р№РЅР°РІС‡Р°С”С‚СЊСЃСЏ СЃС‚СѓРґРµРЅС‚
 		UPDATE SET groupId = source.groupId
-	WHEN NOT MATCHED BY TARGET THEN -- Якщо такого студента ще немає - додамо його
+	WHEN NOT MATCHED BY TARGET THEN -- РЇРєС‰Рѕ С‚Р°РєРѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° С‰Рµ РЅРµРјР°С” - РґРѕРґР°РјРѕ Р№РѕРіРѕ
 		INSERT (firstName, lastName, groupId)
 		VALUES (source.firstName, source.lastName, source.groupId)
-	OUTPUT $action AS performedAction; -- Повертаємо або UPDATE або INSERT в нашому випадку
+	OUTPUT $action AS performedAction; -- РџРѕРІРµСЂС‚Р°С”РјРѕ Р°Р±Рѕ UPDATE Р°Р±Рѕ INSERT РІ РЅР°С€РѕРјСѓ РІРёРїР°РґРєСѓ
 END
